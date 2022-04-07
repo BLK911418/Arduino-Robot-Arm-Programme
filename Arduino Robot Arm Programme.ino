@@ -9,7 +9,7 @@ Servo servo05;
 Servo servo06;
 Servo gripper;
 
-SoftwareSerial Bluetooth(3, 4); // Arduino(RX, TX) - HC-05 Bluetooth (TX, RX)
+SoftwareSerial Bluetooth(2, 3); // Arduino(RX, TX) - HC-05 Bluetooth (TX, RX)
 
 int servo1Pos, servo2Pos, servo3Pos, servo4Pos, servo5Pos, servo6Pos, gripper; // position actuelle
 int servo1PPos, servo2PPos, servo3PPos, servo4PPos, servo5PPos, servo6PPos, gripperPPOS; // position précédente
@@ -19,13 +19,13 @@ int index = 0;
 String dataIn = "";
 
 void setup() {
-  servo01.attach(3);
-  servo02.attach(5);
-  servo03.attach(6);
-  servo04.attach(9);
-  servo05.attach(10);
-  servo06.attach(11);
-  gripper.attach(13);
+  servo01.attach(13);
+  servo02.attach(12);
+  servo03.attach(11);
+  servo04.attach(10);
+  servo05.attach(9);
+  servo06.attach(8);
+  gripper.attach(7);
   Bluetooth.begin(38400); // Débit en bauds par défaut du module Bluetooth
   Bluetooth.setTimeout(1);
   delay(20);
@@ -43,7 +43,7 @@ void setup() {
   servo6PPos = 80;
   servo06.write(servo6PPos);
   gripperPPos = 80;
-  gripper.write(gripperPPos); 
+  gripper.write(gripperPPos); //pince ouverte
 }
 
 void loop() {
@@ -51,7 +51,7 @@ void loop() {
   if (Bluetooth.available() > 0) {
     dataIn = Bluetooth.readString();  // Lire les données sous forme de chaîne(string)
     
-    // Si le curseur "waist" a changé de valeur - Déplacez le Servomoteur 1 en position
+    // Si le curseur "Axe_1" a changé de valeur - Déplacez le Servomoteur 1 en position
     if (dataIn.startsWith("s1")) {
       String dataInS = dataIn.substring(2, dataIn.length()); // Extraire uniquement le nombre. E.g. de "s1120" à "120"
       servo1Pos = dataInS.toInt();  // Convertir la chaîne en entier (string into integer)
